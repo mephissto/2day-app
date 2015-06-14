@@ -98,6 +98,12 @@ static void init() {
   
   // Create main Window element and assign to pointer
   s_main_window = window_create();
+  
+  // Full screen for Pebble
+#ifdef PBL_PLATFORM_APLITE
+  window_set_fullscreen(s_main_window, true);
+#endif
+  
   window_set_background_color(s_main_window, GColorBlack);
 
   // Set handlers to manage the elements inside the Window
