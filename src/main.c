@@ -3,12 +3,9 @@
 static Window *s_main_window;
 static TextLayer *s_date_layer, *s_day_layer, *s_month_layer;
 static GFont s_big_font, s_small_font;
-
+static const char* system_locale;
 
 static void update_time() {
-  
-  // Set Locale
-  setlocale(LC_TIME, "french");
   
   // Get a tm structure
   time_t temp = time(NULL); 
@@ -20,7 +17,7 @@ static void update_time() {
   static char month_buffer[40];
   
   // Write the current date
-  strftime(date_buffer, sizeof("00"), "%e", tick_time);
+  strftime(date_buffer, sizeof(date_buffer), "%e", tick_time);
   strftime(day_buffer, sizeof(day_buffer), "%A", tick_time);
   strftime(month_buffer, sizeof(month_buffer), "%B", tick_time);
 
@@ -36,6 +33,12 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 }
 
 static void main_window_load(Window *window) {
+  
+  // Get system locale
+  system_locale = i18n_get_system_locale();
+  
+  // Set Locale
+  setlocale(LC_ALL, system_locale);
   
   // Create GFont
   s_big_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_KEY_GOTHAM_78));
@@ -54,10 +57,11 @@ static void main_window_load(Window *window) {
   s_date_layer = text_layer_create(GRect(0, 38, 144, 78));
   text_layer_set_background_color(s_date_layer, GColorBlack);
 #ifdef PBL_COLOR
-  text_layer_set_text_color(s_date_layer, GColorElectricBlue);
+  text_layer_set_text_color(s_date_layer, GColorCyan);
 #else
   text_layer_set_text_color(s_date_layer, GColorWhite);
 #endif
+  text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
 
   // Improve the layout to be more like a watchface
   text_layer_set_font(s_date_layer, s_big_font);
