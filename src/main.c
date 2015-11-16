@@ -3,7 +3,6 @@
 static Window *s_main_window;
 static TextLayer *s_date_layer, *s_day_layer, *s_month_layer;
 static GFont s_big_font, s_small_font;
-static const char* system_locale;
 
 static void update_time() {
   
@@ -34,11 +33,8 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 
 static void main_window_load(Window *window) {
   
-  // Get system locale
-  system_locale = i18n_get_system_locale();
-  
   // Set Locale
-  setlocale(LC_ALL, system_locale);
+  setlocale(LC_ALL, i18n_get_system_locale());
   
   // Create GFont
   s_big_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_KEY_GOTHAM_78));
